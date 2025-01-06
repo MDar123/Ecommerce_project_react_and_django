@@ -1,0 +1,30 @@
+steps for making full satck (Angular,Django,Mysql) application
+
+Commands : 
+
+=> py -m venv environment
+=> .\environment\Scripts\activate
+=> pip install Django
+=> pip install djangorestframework
+=> pip install django-cors-headers
+=> pip install pymysql
+=> django-admin startproject SchoolProject
+=> django-admin startapp SchoolApp
+=> Add configuration in settings.py file in INSTALLED_APPS
+=> change sqlite to mysql in settings.py DATABASES
+=> Create models in model.py
+=> adding configurations for corsheaders and rest_framework in settings.py INSTALLED_APPS and added 'corsheaders.middleware.CorsMiddleware' in MIDDLEWARE in settings.py
+=> added these lines in settings.py in last : 
+        CORS_ORIGIN_ALLOW_ALL = True
+        CORS_ALLOW_ALL_HEADERS=True
+=> added serializers.py in schoolapp and added the below code :
+    from rest_framework import serializers
+    from StudentApp.models import Student
+    class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+    model = Student
+    fields = '__all__'
+=> pip install mysqlclient
+                                   => Backend Part completed <=
+
+=> Work on angular/react and integrate that api urls 
