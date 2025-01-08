@@ -1,14 +1,24 @@
-import  { useState } from 'react';
+/* eslint-disable react/prop-types */
+import  { useState,useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, ChevronDown } from 'lucide-react';
 import { Link } from "react-router-dom";
 export default function Header({cartshownumber}) {
   const [isOpen, setIsOpen] = useState(false);
+  const [data,setdata] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+  const navigate = useNavigate()
+useEffect( () => {
+if(localStorage!==null){
+const data = localStorage.getItem('userdata');
+const localData = JSON.parse(data)
+setdata(localData?.username) 
+}
+} ,[data])
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold text-gray-800">
+        <Link to="/" className="text-2xl font-bold text-gray-800">
           Dastaq
         </Link>
         <nav className="hidden md:flex items-center space-x-6">
@@ -23,7 +33,7 @@ export default function Header({cartshownumber}) {
               </span>
             )}
           </Link>
-          <Link to="/" className="text-gray-600 hover:text-gray-800">
+          <Link to="/signup" className="text-gray-600 hover:text-gray-800">
             <User size={24} />
           </Link>
           <div className="relative">
@@ -36,11 +46,26 @@ export default function Header({cartshownumber}) {
             </button>
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                <Link to="/user" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Users</Link>
-                <Link to="/order" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</Link>
-                <Link to="/product" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Products</Link>
+                {
+                  
+                  data ==='admin' ?
+                  (
+                    <div>
+                      <Link to="/userslist" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Users</Link>
+                  <Link to="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</Link>
+                  <Link to="/product" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Products</Link>
+                    </div>
+                  
+                ) : (
+                  <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
+                  )
+                }
+                
                 <button 
-                  onClick={() => console.log('Logout clicked')}
+                  onClick={() => {
+                    localStorage.removeItem('userdata');
+                    navigate('/login')
+                  }}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Logout
@@ -74,12 +99,22 @@ export default function Header({cartshownumber}) {
               </span>
             )}
           </Link>
-          <Link href="/profile" className="flex items-center py-2 text-gray-600 hover:text-gray-800">
-            <User size={20} className="mr-2" /> Profile
+          <Link href="/signup" className="flex items-center py-2 text-gray-600 hover:text-gray-800">
+            <User size={20} className="mr-2" /> Login
           </Link>
-          <Link href="/users" className="block py-2 text-gray-600 hover:text-gray-800">Users</Link>
-          <Link href="/orders" className="block py-2 text-gray-600 hover:text-gray-800">Orders</Link>
-          <Link href="/products" className="block py-2 text-gray-600 hover:text-gray-800">Products</Link>
+          {
+                  localStorage.getItem('username') == 'admin' ?
+                  (
+                    <div>
+                      <Link to="/userslist" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Users</Link>
+                  <Link to="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</Link>
+                  <Link to="/product" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Products</Link>
+                    </div>
+                  
+                ) : (
+                  <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
+                  )
+                }
           <button 
             onClick={() => console.log('Logout clicked')} 
             className="block w-full text-left py-2 text-gray-600 hover:text-gray-800"
